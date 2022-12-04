@@ -9,6 +9,7 @@ import json
 
   
 def check_city():
+    
     url = "https://api.openaq.org/v1/cities?limit=3000&offset=0&sort=asc&order_by=city"
     
     headers = {"accept": "application/json"}

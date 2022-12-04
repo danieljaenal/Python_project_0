@@ -40,7 +40,9 @@ def city_weather(city):
     plt.savefig("temperatura.png")
       
     files = {'photo': open('temperatura.png', 'rb')}  
-    resp= requests.get('https://api.telegram.org/bot5894955616:AAG_4S2XLv9Wx4BhGTC3uykjXWnzwigggj4/sendPhoto?chat_id=-1001822743230', files = files)
+    url= 'https://api.telegram.org/bot5894955616:AAG_4S2XLv9Wx4BhGTC3uykjXWnzwigggj4/sendPhoto?chat_id=-1001822743230'
+    url_caption = url + '&caption=' + 'El tiempo en ' + str(city)
+    resp= requests.get(url_caption, files = files)
       
     # print(resp.status_code)
     # print(resp.text)
@@ -55,8 +57,8 @@ def sample_responses (input_text):
     
     if user_message in cities:
         city_weather(city=user_message)
-        mensaje= "Aquí tienes el tiempo en " + str(user_message)
-        return mensaje
+        # mensaje= "Aquí tienes el tiempo en " + str(user_message)
+        # return mensaje
 
     elif user_message not in cities:
         return "City not found, please try another one"
