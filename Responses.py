@@ -14,7 +14,7 @@ import json
 import pandas as pd
 from datetime import datetime
 import matplotlib.pyplot as plt
-
+import available_cities
 
 def city_weather(city):
   
@@ -57,23 +57,19 @@ def sample_responses (input_text):
     user_message = str(input_text)
     user_message= user_message.replace("/", "")
     print(user_message)
-
-    if user_message == "hello":
-        return "Hey, how is it going"
     
-    if user_message in ("hello", "hi", "sup"):
-        return "Hey, how is it going"
-    
-    cities=["Málaga", "Madrid", "Barcelona", "La Coruña"]
+    cities=available_cities.check_city()
     
     if user_message in cities:
         city_weather(city=user_message)
-          
+
+    elif user_message not in cities:
+        return "City not found, please try another one"
     
     if user_message in ("time", "time?"):
         new = datetime.now()
         date_time= now.strftime("%d/%m/%y, %H:%M:%S")
         return str(date_time)
     
-    print("llegué")
-    # return "I don't understand you"
+    # print("llegué")
+    return "I don't understand you"
