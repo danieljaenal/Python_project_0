@@ -9,33 +9,26 @@ from telegram.ext import *
 import Responses as R
 import json
 from telegram import Update
-
-print("Bot started... ")
-
-
 from telegram.ext import Updater, InlineQueryHandler, CommandHandler
 import requests
-
 import urllib.request
 import urllib.parse
-
 from datetime import datetime
 import matplotlib.pyplot as plt
 
 
+
+print("Bot started... ")
 
 def get_url():
     contents = requests.get('https://random.dog/woof.json').json()    
     url = contents['url']
     # print(url)
     return url
-# def echo(update: Update, context: CallbackContext):
-# 	update.message.reply_photo(photo=url)
 
-def tiempo(bot, update): 
-    # c_id = '-1001822743230'   
-    # filename = 'C:/Users/danie/Documents/Python_project/temperatura.png'  
-    files = {'photo': open('foto.jpg', 'rb')}  
+def foto_local(bot, update): 
+ 
+    files = {'photo': open('foto.jpg', 'rb')}   #esta foto en local debe de existir
     resp= requests.get('https://api.telegram.org/bot5894955616:AAG_4S2XLv9Wx4BhGTC3uykjXWnzwigggj4/sendPhoto?chat_id=-1001822743230', files = files)
 
     print(resp.status_code)
@@ -51,7 +44,7 @@ def perro(bot, update):
     url = get_url()
     url_chat= 'https://api.telegram.org/bot5894955616:AAG_4S2XLv9Wx4BhGTC3uykjXWnzwigggj4/sendPhoto'
     parameters = {
-        "chat_id": '-1001822743230',
+        "chat_id": keys.chat_id,
         "photo": url}
     resp= requests.get(url_chat, data = parameters)
     print(resp.text)
@@ -76,12 +69,11 @@ def main():
     updater= Updater(keys.API_KEY, use_context=True)
     dp= updater.dispatcher
     
-    dp.add_handler(CommandHandler("tiempo", tiempo))
+    dp.add_handler(CommandHandler("test", foto_local))
     dp.add_handler(CommandHandler("perro", perro))
     dp.add_handler(CommandHandler("url", send_photo_from_URL))
-    # dp.add_handler(CommandHandler("Madrid", city_weather))
     
-    dp.add_handler(MessageHandler(Filters.text, handle_message))
+    dp.add_handler(MessageHandler(Filters.text, handle_message)) #TODO MENSAJE QUE NO SEA '/test', '/perro', '/url', irá por esta vía
     dp.add_error_handler(error)
     
     updater.start_polling()

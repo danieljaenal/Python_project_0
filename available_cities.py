@@ -23,16 +23,3 @@ def check_city():
     
     return cities
     
-
-# print(response.text)
-
-# url = "https://api.openaq.org/v1/cities"
-
-# pais = "ES"
-# datos= requests.get(url, params={"country": pais})
-
-# js = datos.json()
-
-# for item in js["results"]:
-#   city = item["name"]
-#   print(city)

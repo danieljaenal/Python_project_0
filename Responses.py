@@ -5,12 +5,17 @@ Created on Sat Dec  3 18:59:40 2022
 @author: danie
 """
 
+#A ESTE MÓDULO VENGO CUANDO RECIBO UN MENSAJE EN EL BOT DEL TELEGRAM. 
+#ANALIZO SI ES UNA CIUDAD EN LA LISTA DE CIUDADES DISPONIBLES. DE SER ASÍ, LLAMARÉ A LA FUNCIÓN city_weather
+# PARA QUE ME GENERE LA GRÁFICA Y LA ENVÍE COMO MENSAJE DE VUELTA AL CHAT DE TELEGRAM. 
+
 import requests
 import urllib.request
 import urllib.parse
 from datetime import datetime
 import matplotlib.pyplot as plt
 import available_cities
+import Constants
 
 def city_weather(city):
   
@@ -20,7 +25,6 @@ def city_weather(city):
     # city= urllib.parse.quote(input("Introduce la ciudad: "))
     city_uncoded=urllib.parse.quote(city)
     url2= url.replace("{city name}", city_uncoded).replace("{API key}", api_key)
-    # print(url2)
       
     data= requests.get(url2)
     js = data.json()
@@ -30,7 +34,7 @@ def city_weather(city):
     for item in js["list"]:
       temperatura.append(item["main"]["feels_like"])
       fechas.append(item["dt_txt"])
-      
+     
       
     ts2 = [datetime.strptime(d, '%Y-%m-%d %H:%M:%S') for d in fechas]
     fig= plt.figure(figsize=(12, 4))
@@ -43,15 +47,16 @@ def city_weather(city):
     plt.savefig("temperatura.png")
       
     files = {'photo': open('temperatura.png', 'rb')}  
-    # url= 'https://api.telegram.org/bot5894955616:AAG_4S2XLv9Wx4BhGTC3uykjXWnzwigggj4/sendPhoto?chat_id=-1001822743230'
-    url= 'https://api.telegram.org/bot5894955616:AAG_4S2XLv9Wx4BhGTC3uykjXWnzwigggj4/sendPhoto?chat_id=132274401'
+
+    url= 'https://api.telegram.org/bot' + Constants.API_KEY + '/sendPhoto?chat_id=' + Constants.chat_id
+
     url_caption = url + '&caption=' + 'El tiempo en ' + str(city)
     resp= requests.get(url_caption, files = files)
       
     # print(resp.status_code)
     # print(resp.text)
 
-  
+
 def sample_responses (input_text):
 
     user_message = str(input_text)
@@ -71,7 +76,6 @@ def sample_responses (input_text):
         new = datetime.now()
         date_time= now.strftime("%d/%m/%y, %H:%M:%S")
         return str(date_time)
-    
-    # print("llegué")
+
     else:
         return "I don't understand you"
