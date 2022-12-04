@@ -5,10 +5,58 @@ Created on Sat Dec  3 18:59:40 2022
 @author: danie
 """
 
+from telegram.ext import Updater, InlineQueryHandler, CommandHandler
+import requests
+import re
+import urllib.request
+import urllib.parse
+import json
+import pandas as pd
 from datetime import datetime
+import matplotlib.pyplot as plt
+
+
+def city_weather(city):
+  
+    url= "https://api.openweathermap.org/data/2.5/forecast?q={city name}&units=metric&appid={API key}"
+    api_key = '3886d5996f84c5b9a5c953b027fc2306'
+      
+    # city= urllib.parse.quote(input("Introduce la ciudad: "))
+    city=urllib.parse.quote(city)
+    url2= url.replace("{city name}", city).replace("{API key}", api_key)
+    # print(url2)
+      
+    data= requests.get(url2)
+    js = data.json()
+      
+    fechas=[]
+    temperatura=[]
+    for item in js["list"]:
+      temperatura.append(item["main"]["feels_like"])
+      fechas.append(item["dt_txt"])
+      
+    from datetime import datetime
+    import matplotlib.pyplot as plt
+      
+    ts2 = [datetime.strptime(d, '%Y-%m-%d %H:%M:%S') for d in fechas]
+    fig= plt.figure(figsize=(12, 4))
+    plt.grid()
+      
+    plt.plot(ts2, temperatura, color="blue");
+    plt.savefig("temperatura.png")
+      
+    files = {'photo': open('temperatura.png', 'rb')}  
+    resp= requests.get('https://api.telegram.org/bot5894955616:AAG_4S2XLv9Wx4BhGTC3uykjXWnzwigggj4/sendPhoto?chat_id=-1001822743230', files = files)
+      
+    print(resp.status_code)
+    print(resp.text)
+
 
 def sample_responses (input_text):
-    user_message = str(input_text).lower()
+    print(input_text)
+    user_message = str(input_text)
+    user_message= user_message.replace("/", "")
+    print(user_message)
 
     if user_message == "hello":
         return "Hey, how is it going"
@@ -16,8 +64,11 @@ def sample_responses (input_text):
     if user_message in ("hello", "hi", "sup"):
         return "Hey, how is it going"
     
-    if user_message in ("who are you", "who are you?"):
-        return "I am ABC bot"
+    cities=["Málaga", "Madrid", "Barcelona", "La Coruña"]
+    
+    if user_message in cities:
+        city_weather(city=user_message)
+          
     
     if user_message in ("time", "time?"):
         new = datetime.now()
