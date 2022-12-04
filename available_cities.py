@@ -5,7 +5,7 @@ Created on Sun Dec  4 12:55:41 2022
 @author: danie
 """
 import requests
-
+import json
 
   
 def check_city():

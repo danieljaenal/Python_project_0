@@ -5,13 +5,9 @@ Created on Sat Dec  3 18:59:40 2022
 @author: danie
 """
 
-from telegram.ext import Updater, InlineQueryHandler, CommandHandler
 import requests
-import re
 import urllib.request
 import urllib.parse
-import json
-import pandas as pd
 from datetime import datetime
 import matplotlib.pyplot as plt
 import available_cities
@@ -35,8 +31,6 @@ def city_weather(city):
       temperatura.append(item["main"]["feels_like"])
       fechas.append(item["dt_txt"])
       
-    from datetime import datetime
-    import matplotlib.pyplot as plt
       
     ts2 = [datetime.strptime(d, '%Y-%m-%d %H:%M:%S') for d in fechas]
     fig= plt.figure(figsize=(12, 4))
@@ -48,20 +42,21 @@ def city_weather(city):
     files = {'photo': open('temperatura.png', 'rb')}  
     resp= requests.get('https://api.telegram.org/bot5894955616:AAG_4S2XLv9Wx4BhGTC3uykjXWnzwigggj4/sendPhoto?chat_id=-1001822743230', files = files)
       
-    print(resp.status_code)
-    print(resp.text)
+    # print(resp.status_code)
+    # print(resp.text)
 
-
+  
 def sample_responses (input_text):
-    print(input_text)
+
     user_message = str(input_text)
     user_message= user_message.replace("/", "")
-    print(user_message)
     
     cities=available_cities.check_city()
     
     if user_message in cities:
         city_weather(city=user_message)
+        mensaje= "Aquí tienes el tiempo en " + str(user_message)
+        return mensaje
 
     elif user_message not in cities:
         return "City not found, please try another one"
