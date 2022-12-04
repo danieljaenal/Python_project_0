@@ -17,7 +17,6 @@ from datetime import datetime
 import matplotlib.pyplot as plt
 
 
-
 print("Bot started... ")
 
 def get_url():
@@ -47,18 +46,14 @@ def perro(bot, update):
         "chat_id": keys.chat_id,
         "photo": url}
     resp= requests.get(url_chat, data = parameters)
-    print(resp.text)
-
-def start_command(update, context):
-    update.message.reply_text("Type something random to get started!")
     
-def help_command(update, context):
-    update.message.reply_text("if you need help you should ask Google!")
+    # print(resp.text)
+
 
 def handle_message(update, context):
     text = str(update.message.text)
     # print(text)
-    response = R.sample_responses(text)
+    response = R.chequear_respuesta(text)
     
     update.message.reply_text(response)
     

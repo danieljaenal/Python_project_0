@@ -57,7 +57,7 @@ def city_weather(city):
     # print(resp.text)
 
 
-def sample_responses (input_text):
+def chequear_respuesta (input_text):
 
     user_message = str(input_text)
     user_message= user_message.replace("/", "")
@@ -71,11 +71,8 @@ def sample_responses (input_text):
 
     elif user_message not in cities:
         return "City not found, please try another one"
-    
-    elif user_message in ("time", "time?"):
-        new = datetime.now()
-        date_time= now.strftime("%d/%m/%y, %H:%M:%S")
-        return str(date_time)
 
     else:
         return "I don't understand you"
+    
+    return "Listo, dime otra ciudad de la que quieras conocer el pronóstico del tiempo o escribe /perro"
